@@ -1,0 +1,12 @@
+<h3>Hello Coins!</h3>
+<table class='table table-striped table-responsive'>
+<% @coins.each do |coin| %>
+  <tr>
+    <th><%= coin.cryptocompare_rank %></th>
+    <th><%= coin.symbol.upcase %></th>
+    <td><%= coin.name %></td>
+    <td><%= coin.proof_type %></td>
+    <td><%= number_to_human(coin.total_supply) %></td>
+  </tr>
+<% end -%>
+</table>
