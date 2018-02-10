@@ -1,0 +1,40 @@
+<h3>Hello Coins!</h3>
+<h5><%= pluralize(@coins.size, "Coin") %></h5>
+<%= link_to "See coins list", coins_path %>
+
+<!-- TradingView Widget BEGIN -->
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<!-- TradingView Widget END -->
+
+<div class='row'>
+  <% @coins.each do |coin| %>
+  <div class='col-xs-12 col-lg-6'>
+    <div class='clearfix'>
+      <% if coin.chartable? %>
+        <script type="text/javascript">
+        new TradingView.widget({
+          // "autosize": true,
+          "height": 300,
+          "width": 500, 
+          "symbol": "BITTREX:<%= coin.symbol %>BTC",
+          "interval": "1W",
+          "timezone": "Etc/UTC",
+          "theme": "Dark",
+          "style": "2",
+          "locale": "en",
+          "toolbar_bg": "#f1f3f6",
+          "enable_publishing": false,
+          // "hide_top_toolbar": true,
+          "hideideas": true,
+          "show_popup_button": true
+        });
+        </script>
+      <% end %>      
+    </div>
+    <h5><%= coin.symbol %></h5>
+    <div><%= link_to("Coinigy Chart", coin.coinigy_url, target: '_blank') %>
+</div>
+  </div>
+  <% end -%>
+</div>
+
