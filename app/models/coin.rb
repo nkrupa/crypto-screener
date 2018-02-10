@@ -27,8 +27,8 @@ class Coin < ApplicationRecord
      self.exchanges.any? && self.exchanges.include?("Binance")
   end
 
-  def chartable?
-    on_bittrex?
+  def trading_view_chartable?
+    on_bittrex? || on_binance?
   end
 
   def coinigy_url
@@ -42,6 +42,14 @@ class Coin < ApplicationRecord
       "CPIA"
     elsif on_binance?
       "BINA"
+    end
+  end
+
+  def trading_view_exchange
+    if on_bittrex?
+      "BITTREX"
+    elsif on_binance?
+      "BINANCE"
     end
   end
 
