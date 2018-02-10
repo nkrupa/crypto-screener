@@ -1,6 +1,7 @@
 <h3>Hello Coins!</h3>
 <h5><%= pluralize(@coins.size, "Coin") %></h5>
-<%= link_to "See charts", watchlist_coins_path %>
+<%= page_entries_info @coins %>
+<%= paginate @coins %>
 <table class='table table-striped table-responsive'>
 <% @coins.each do |coin| %>
   <tr>
@@ -25,6 +26,9 @@
   </tr>
 <% end -%>
 </table>
+<%= page_entries_info @coins %>
+<%= paginate @coins %>
+
 <% content_for :javascripts do %>
 <script type='text/javascript'>
 console.log("Hi!")
