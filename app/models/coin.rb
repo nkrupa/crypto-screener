@@ -1,15 +1,9 @@
 class Coin < ApplicationRecord
   validates :symbol, presence: true, uniqueness: true
 
-  # serialize :exchanges, Array
-
   scope :positive_fa_score, -> { where("tri_fa_score >= 1")}
 
-  # scope :tri_fa_prime, -> do
-  #   where("available_supply IS NOT NULL AND available_supply BETWEEN ? AND ?", 1_000, 25_000_000).
-  #   where("market_cap > ?", 5_000_000)#.
-  #   # where("last_volume_btc BETWEEN ? AND ?", 10, 100)
-  # end
+  before_save :set_market_structure_timestamp!
 
   def self.for(symbol)
     find_by!(symbol: symbol.upcase) 
@@ -104,6 +98,12 @@ class Coin < ApplicationRecord
         summary << "NEGATIVES:"
         summary.concat(self.tri_fa_negatives)
       end
+    end
+  end
+
+  def set_market_structure_timestamp!
+    if market_structure_status_changed?
+      self.market_structure_checked_at = Time.current.utc
     end
   end
 end

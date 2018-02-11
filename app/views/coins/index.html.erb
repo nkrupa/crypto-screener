@@ -1,17 +1,15 @@
-<h3>Hello Coins!</h3>
-<h5><%= pluralize(@coins.size, "Coin") %></h5>
+<h3>Coins</h3>
 <%= page_entries_info @coins %>
 <%= paginate @coins %>
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-<table class='table table-striped table-responsive'>
+<table id='coins' class='table table-striped table-responsive'>
 <% @coins.each do |coin| %>
   <tr data-id=<%= coin.id %>>
     <th><%= coin.cryptocompare_rank %></th>
     <th><%= coin.symbol %></th>
     <td><%= link_to(coin.name, coin_path(coin)) %></td>
     <td><%= coin.proof_type %></td>
-    <td><%= number_to_human(coin.available_supply) %></td>
-    <td><%= number_to_human(coin.total_supply) %></td>
+    <td><%= number_to_human(coin.available_supply) %> Coins</td>
     <td><%= [number_with_delimiter(coin.last_volume_btc), 'BTC'].join(' ') if coin.last_volume_btc %></td>
     <td><%= number_to_currency(coin.market_cap) if coin.market_cap.present? %></td>
     <td><%= coin.tri_fa_score %> <div data-toggle="tooltip" data-placement="bottom" title="<%= coin.tooltip_score_summary.join("\n") %>"><i class='fas fa-info-circle'</div></td>
@@ -21,12 +19,15 @@
       <div><a href='javascript:void(0)' data-toggle="tooltip" data-placement="bottom" title="<%= coin.exchanges.join("\n") %>">Exchanges</a></div>
     </td>
     <td>
-      <%= form_for(coin) do |f| %>
-        <%= f.select(:market_structure_status, [["Bad Location","bad_location"],["W Forming", "w_forming"],["Good Location", "good_location"]], prompt: '') %>
+      <%= form_for(coin, remote: true) do |f| %>
+        <%= f.select(:market_structure_status, [["Bad Location","bad_location"],
+                                                ["Price Falling", "price_falling"],
+                                                ["W Forming", "w_forming"],
+                                                ["Good Location", "good_location"]], prompt: '') %>
       <% end -%>
     </td>
     <td>
-      <% if false and coin.trading_view_chartable? %>
+      <% if coin.trading_view_chartable? %>
         <% tv_chart_id = "tv-medium-widget-#{coin.symbol.downcase}btc" %>
         <!-- TradingView Widget BEGIN -->
         <div id="<%= tv_chart_id %>"></div>
