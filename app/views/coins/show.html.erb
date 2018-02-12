@@ -1,0 +1,61 @@
+<div class='row'>
+  <div class='col'>
+    <h3><%= @coin.symbol %> Details</h3>
+  </div>
+</div>
+<div class='row'>
+  <div class='col'>
+    <!-- TradingView Widget BEGIN -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+    new TradingView.widget({
+      "width": 980,
+      "height": 610,
+      "symbol": "<%= @coin.trading_view_exchange %>:<%= @coin.symbol %>BTC",
+      "interval": "W",
+      "timezone": "Etc/UTC",
+      "theme": "Dark",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#f1f3f6",
+      "enable_publishing": false,
+      "hide_side_toolbar": false,
+      "allow_symbol_change": true,
+      "hideideas": true
+    });
+    </script>
+    <!-- TradingView Widget END -->    
+  </div>
+</div>
+<div class='row'>
+  <div class='col'>
+    <h5>Coin Details</h5>
+    <div class='row'>
+      <div class='col'>
+        <table class='table table-striped'>
+          <tr><th>Symbol</th><td><%= @coin.symbol %></td></tr>
+          <tr><th>Circulating</th><td><%= number_to_human(@coin.available_supply) %> Coins</td></tr>
+          <tr><th>Exchanges</th><td><%= @coin.exchanges.join("<br>").html_safe %></td></tr>
+        </table>
+      </div>
+
+      <div class='col'>
+        <table class='table table-striped'>
+          <tr><th>Market Cap</th><td><%= number_to_currency(@coin.market_cap) if @coin.market_cap.present? %></td></tr>
+          <tr><th>Volume (BTC)</th><td><%= [number_with_delimiter(@coin.last_volume_btc), 'BTC'].join(' ') if @coin.last_volume_btc %></td></tr>
+        </table>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<% content_for :javascripts do %>
+<script type='text/javascript'>
+console.log("Hi!")
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+<% end -%>

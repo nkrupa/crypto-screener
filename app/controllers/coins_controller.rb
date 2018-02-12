@@ -1,7 +1,12 @@
 class CoinsController < ApplicationController
 
   def index
+    @container_fluid = true
     @coins = Coin.positive_fa_score.order("tri_fa_score desc, cryptocompare_rank asc").page(params[:page])
+  end
+
+  def show
+    @coin = Coin.find(params[:id])
   end
 
   def update
